@@ -211,3 +211,52 @@ int index_save(const Index *index) {
 
     return rename(tmp_path, INDEX_FILE);
 }
+
+
+
+
+int index_add(Index *index, const char *path) {
+    struct stat st;
+    if (lstat(path, &st) != 0) return -1;
+    if (S_ISDIR(st.st_mode)) return -1;
+
+    FILE *f = fopen(path, "rb");
+    if (!f) return -1;
+
+    void *data = NULL;
+    if (st.st_size > 0) {
+        data = malloc(st.st_size);
+        if (!data) {
+            fclose(f);
+            return -1;
+        }
+        if (fread(data, 1, st.st_size, f) != (size_t)st.st_size) {
+            free(data);
+            fclose(f);
+            return -1;
+        }
+    }
+    fclose(f);
+
+    ObjectID id;
+    if (object_write(OBJ_BLOB, data, st.st_size, &id) != 0) {
+        free(data);
+        return -1;
+    }
+    free(data);
+
+    IndexEntry *entry = index_find(index, path);
+    if (!entry) {
+        if (index->count >= MAX_INDEX_ENTRIES) return -1;
+        entry = &index->entries[index->count++];
+    }
+
+    entry->mode = (st.st_mode & S_IXUSR) ? 0100755 : 0100644;
+    entry->hash = id;
+    entry->mtime_sec = st.st_mtime;
+    entry->size = st.st_size;
+    strncpy(entry->path, path, sizeof(entry->path) - 1);
+    entry->path[sizeof(entry->path) - 1] = '\0';
+
+    return index_save(index);
+}
