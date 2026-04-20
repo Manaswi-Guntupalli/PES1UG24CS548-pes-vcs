@@ -21,7 +21,7 @@ This is a **template repository**. Do **not** fork it.
 1. Click **"Use this template"** → **"Create a new repository"** on GitHub
 2. Name your repository (e.g., `SRN-pes-vcs`) and set it to **public**. Replace `SRN` with your actual SRN, e.g., `PESXUG24CSYYY-pes-vcs`
 3. Clone this repository to your local machine and do all your lab work inside this directory.
-4.  **Important:** Remember to commit frequently as you progress. You are required to have a minimum of 5 detailed commits per phase. Refer to [Submission Requirements](#submission-requirements) for more details.
+4. **Important:** Remember to commit frequently as you progress. You are required to have a minimum of 5 detailed commits per phase. Refer to [Submission Requirements](#submission-requirements) for more details.
 5. Clone your new repository and start working
 
 The repository contains skeleton source files with `// TODO` markers where you need to write code. Functions marked `// PROVIDED` are complete — do not modify them.
@@ -46,21 +46,21 @@ If unset, it defaults to `"PES User <pes@localhost>"`.
 
 ### File Inventory
 
-| File               | Role                                 | Your Task                                          |
-| ------------------ | ------------------------------------ | -------------------------------------------------- |
-| `pes.h`            | Core data structures and constants   | Do not modify                                      |
-| `object.c`         | Content-addressable object store     | Implement `object_write`, `object_read`            |
-| `tree.h`           | Tree object interface                | Do not modify                                      |
-| `tree.c`           | Tree serialization and construction  | Implement `tree_from_index`                        |
-| `index.h`          | Staging area interface               | Do not modify                                      |
-| `index.c`          | Staging area (text-based index file) | Implement `index_load`, `index_save`, `index_add`  |
-| `commit.h`         | Commit object interface              | Do not modify                                      |
-| `commit.c`         | Commit creation and history          | Implement `commit_create`                          |
-| `pes.c`            | CLI entry point and command dispatch | Do not modify                                      |
-| `test_objects.c`   | Phase 1 test program                 | Do not modify                                      |
-| `test_tree.c`      | Phase 2 test program                 | Do not modify                                      |
-| `test_sequence.sh` | End-to-end integration test          | Do not modify                                      |
-| `Makefile`         | Build system                         | Do not modify                                      |
+| File               | Role                                 | Your Task                                         |
+| ------------------ | ------------------------------------ | ------------------------------------------------- |
+| `pes.h`            | Core data structures and constants   | Do not modify                                     |
+| `object.c`         | Content-addressable object store     | Implement `object_write`, `object_read`           |
+| `tree.h`           | Tree object interface                | Do not modify                                     |
+| `tree.c`           | Tree serialization and construction  | Implement `tree_from_index`                       |
+| `index.h`          | Staging area interface               | Do not modify                                     |
+| `index.c`          | Staging area (text-based index file) | Implement `index_load`, `index_save`, `index_add` |
+| `commit.h`         | Commit object interface              | Do not modify                                     |
+| `commit.c`         | Commit creation and history          | Implement `commit_create`                         |
+| `pes.c`            | CLI entry point and command dispatch | Do not modify                                     |
+| `test_objects.c`   | Phase 1 test program                 | Do not modify                                     |
+| `test_tree.c`      | Phase 2 test program                 | Do not modify                                     |
+| `test_sequence.sh` | End-to-end integration test          | Do not modify                                     |
+| `Makefile`         | Build system                         | Do not modify                                     |
 
 ---
 
@@ -124,6 +124,7 @@ A tree represents a directory. It's a list of entries, each pointing to a blob (
 ```
 
 Mode values:
+
 - `100644` — regular file, not executable
 - `100755` — regular file, executable
 - `040000` — directory (tree)
@@ -237,6 +238,7 @@ def store_object(content):
 ```
 
 This gives us:
+
 - **Deduplication:** Identical files stored once
 - **Integrity:** Hash verifies data isn't corrupted
 - **Immutability:** Changing content = different hash = different object
@@ -370,13 +372,18 @@ make test_objects
 ```
 
 The test program verifies:
+
 - Blob storage and retrieval (write, read back, compare)
 - Deduplication (same content → same hash → stored once)
 - Integrity checking (detects corrupted objects)
 
 **📸 Screenshot 1A:** Output of `./test_objects` showing all tests passing.
 
+![Screenshot 1A](screenshots/1A.png)
+
 **📸 Screenshot 1B:** `find .pes/objects -type f` showing the sharded directory structure.
+
+![Screenshot 1B](screenshots/1B.png)
 
 ---
 
@@ -403,12 +410,17 @@ make test_tree
 ```
 
 The test program verifies:
+
 - Serialize → parse roundtrip preserves entries, modes, and hashes
 - Deterministic serialization (same entries in any order → identical output)
 
 **📸 Screenshot 2A:** Output of `./test_tree` showing all tests passing.
 
+![Screenshot 2A](screenshots/2A.png)
+
 **📸 Screenshot 2B:** Pick a tree object from `find .pes/objects -type f` and run `xxd .pes/objects/XX/YYY... | head -20` to show the raw binary format.
+
+![Screenshot 2B](screenshots/2B.png)
 
 ---
 
@@ -466,7 +478,11 @@ cat .pes/index    # Human-readable text format
 
 **📸 Screenshot 3A:** Run `./pes init`, `./pes add file1.txt file2.txt`, `./pes status` — show the output.
 
+![Screenshot 3A](screenshots/3A.png)
+
 **📸 Screenshot 3B:** `cat .pes/index` showing the text-format index with your entries.
+
+![Screenshot 3B](screenshots/3B.png)
 
 ---
 
@@ -517,9 +533,19 @@ make test-integration
 
 **📸 Screenshot 4A:** Output of `./pes log` showing three commits with hashes, authors, timestamps, and messages.
 
+![Screenshot 4A](screenshots/4A.png)
+
 **📸 Screenshot 4B:** `find .pes -type f | sort` showing object store growth after three commits.
 
+![Screenshot 4B](screenshots/4B.png)
+
 **📸 Screenshot 4C:** `cat .pes/refs/heads/main` and `cat .pes/HEAD` showing the reference chain.
+
+![Screenshot 4C](screenshots/4C.png)
+
+### Analysis File
+
+[Open Analysis.md](Analysis.md)
 
 ---
 
@@ -552,22 +578,22 @@ The following questions cover filesystem concepts beyond the implementation scop
 | 1     | 1A  | `./test_objects` output showing all tests passing               |
 | 1     | 1B  | `find .pes/objects -type f` showing sharded directory structure |
 | 2     | 2A  | `./test_tree` output showing all tests passing                  |
-| 2     | 2B  | `xxd` of a raw tree object (first 20 lines)                    |
-| 3     | 3A  | `pes init` → `pes add` → `pes status` sequence                 |
+| 2     | 2B  | `xxd` of a raw tree object (first 20 lines)                     |
+| 3     | 3A  | `pes init` → `pes add` → `pes status` sequence                  |
 | 3     | 3B  | `cat .pes/index` showing the text-format index                  |
-| 4     | 4A  | `pes log` output with three commits                            |
-| 4     | 4B  | `find .pes -type f \| sort` showing object growth              |
-| 4     | 4C  | `cat .pes/refs/heads/main` and `cat .pes/HEAD`                 |
+| 4     | 4A  | `pes log` output with three commits                             |
+| 4     | 4B  | `find .pes -type f \| sort` showing object growth               |
+| 4     | 4C  | `cat .pes/refs/heads/main` and `cat .pes/HEAD`                  |
 | Final | --  | Full integration test (`make test-integration`)                 |
 
 ### Code Files Required (5 files)
 
-| File           | Description                              |
-| -------------- | ---------------------------------------- |
-| `object.c`     | Object store implementation              |
-| `tree.c`       | Tree serialization and construction      |
-| `index.c`      | Staging area implementation              |
-| `commit.c`     | Commit creation and history walking      |
+| File       | Description                         |
+| ---------- | ----------------------------------- |
+| `object.c` | Object store implementation         |
+| `tree.c`   | Tree serialization and construction |
+| `index.c`  | Staging area implementation         |
+| `commit.c` | Commit creation and history walking |
 
 ### Analysis Questions (written answers)
 
@@ -576,22 +602,25 @@ The following questions cover filesystem concepts beyond the implementation scop
 | Branching (analysis-only) | Q5.1, Q5.2, Q5.3 |
 | GC (analysis-only)        | Q6.1, Q6.2       |
 
------------
+---
 
 ## Submission Requirements
 
 **1. GitHub Repository**
-* You must submit the link to your GitHub repository via the official submission link (which will be shared by your respective faculty).
-* The repository must strictly maintain the directory structure you built throughout this lab.
-* Ensure your github repository is made `public`
+
+- You must submit the link to your GitHub repository via the official submission link (which will be shared by your respective faculty).
+- The repository must strictly maintain the directory structure you built throughout this lab.
+- Ensure your github repository is made `public`
 
 **2. Lab Report**
-* Your report, containing all required **screenshots** and answers to the **analysis questions**, must be placed at the **root** of your repository directory.
-* The report must be submitted as either a PDF (`report.pdf`) or a Markdown file (`README.md`).
+
+- Your report, containing all required **screenshots** and answers to the **analysis questions**, must be placed at the **root** of your repository directory.
+- The report must be submitted as either a PDF (`report.pdf`) or a Markdown file (`README.md`).
 
 **3. Commit History (Graded Requirement)**
-* **Minimum Requirement:** You must have a minimum of **5 commits per phase** with appropriate commit messages. Submitting fewer than 5 commits for any given phase will result in a deduction of marks.
-* **Best Practices:** We highly prefer more than 5 detailed commits per phase. Granular commits that clearly show the delta in code block changes allow us to verify your step-by-step understanding of the concepts and prevent penalties <3
+
+- **Minimum Requirement:** You must have a minimum of **5 commits per phase** with appropriate commit messages. Submitting fewer than 5 commits for any given phase will result in a deduction of marks.
+- **Best Practices:** We highly prefer more than 5 detailed commits per phase. Granular commits that clearly show the delta in code block changes allow us to verify your step-by-step understanding of the concepts and prevent penalties <3
 
 ---
 
