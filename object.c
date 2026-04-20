@@ -124,7 +124,7 @@ int object_write(ObjectType type, const void *data, size_t len, ObjectID *id_out
     snprintf(dir, sizeof(dir), "%s/%.2s", OBJECTS_DIR, hex);
     snprintf(path, sizeof(path), "%s/%s", dir, hex + 2);
 
-    //mkdir(dir, 0755);
+    mkdir(dir, 0755);
 
     char tmp[600];
     snprintf(tmp, sizeof(tmp), "%s/tmpXXXXXX", dir);
@@ -144,7 +144,7 @@ int object_write(ObjectType type, const void *data, size_t len, ObjectID *id_out
     fsync(fd);
     close(fd);
 
-    rename(tmp, path);
+    //rename(tmp, path);
 
     int dfd = open(dir, O_RDONLY);
     if (dfd >= 0) {
