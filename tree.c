@@ -25,7 +25,7 @@ extern int object_write(ObjectType type, const void *data, size_t len, ObjectID 
 #define MODE_DIR       0040000
 
 // ─── PROVIDED ───────────────────────────────────────────────────────────────
-
+/*
 // Determine the object mode for a filesystem path.
 uint32_t get_file_mode(const char *path) {
     struct stat st;
@@ -35,7 +35,7 @@ uint32_t get_file_mode(const char *path) {
     if (st.st_mode & S_IXUSR) return MODE_EXEC;
     return MODE_FILE;
 }
-
+*/
 // Parse binary tree data into a Tree struct safely.
 // Returns 0 on success, -1 on parse error.
 int tree_parse(const void *data, size_t len, Tree *tree_out) {
@@ -208,7 +208,7 @@ static int write_tree_level(IndexEntry *entries, int count, int depth, ObjectID 
     free(data);
     return 0;
 }
-/*
+
 int tree_from_index(ObjectID *id_out) {
     Index idx;
     if (index_load(&idx) != 0) return -1;
@@ -226,4 +226,4 @@ int tree_from_index(ObjectID *id_out) {
     
     return write_tree_level(idx.entries, idx.count, 0, id_out);
 }
-*/
+
