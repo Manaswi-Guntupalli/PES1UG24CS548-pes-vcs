@@ -543,15 +543,15 @@ make test-integration
 
 ![Screenshot 4C](screenshots/4C.png)
 
-### Analysis File
-
-[Open Analysis.md](Analysis.md)
-
 ---
 
 ## Phase 5 & 6: Analysis-Only Questions
 
 The following questions cover filesystem concepts beyond the implementation scope of this lab. Answer them in writing — no code required.
+
+### Analysis Answers
+
+[Open Analysis.md](Analysis.md)
 
 ### Branching and Checkout
 
