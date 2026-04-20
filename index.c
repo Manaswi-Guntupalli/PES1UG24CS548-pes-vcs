@@ -150,7 +150,24 @@ int index_status(const Index *index) {
 static int compare_index_entries(const void *a, const void *b) {
     return strcmp(((const IndexEntry *)a)->path, ((const IndexEntry *)b)->path);
 }
+int index_load(Index *index) {
+    index->count = 0;
+    FILE *f = fopen(INDEX_FILE, "r");
+    if (!f) return 0;
 
+    char line[1024];
+    while (fgets(line, sizeof(line), f)) {
+        if (index->count >= MAX_INDEX_ENTRIES) break;
+        IndexEntry *e = &index->entries[index->count];
+        char hex[HASH_HEX_SIZE + 1];
+        if (sscanf(line, "%o %64s %lu %u %511[^\n]", &e->mode, hex, &e->mtime_sec, &e->size, e->path) == 5) {
+            hex_to_hash(hex, &e->hash);
+            index->count++;
+        }
+    }
+    fclose(f);
+    return 0;
+}
 
 
 // Stage a file for the next commit.
