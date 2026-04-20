@@ -144,7 +144,7 @@ int object_write(ObjectType type, const void *data, size_t len, ObjectID *id_out
     fsync(fd);
     close(fd);
 
-    //rename(tmp, path);
+    rename(tmp, path);
 
     int dfd = open(dir, O_RDONLY);
     if (dfd >= 0) {
@@ -187,7 +187,7 @@ int object_read(const ObjectID *id, ObjectType *type_out,
     FILE *fp = fopen(path, "rb");
     if (!fp) return -1;
 
-    fseek(fp, 0, SEEK_END);
+    //fseek(fp, 0, SEEK_END);
     long size = ftell(fp);
     rewind(fp);
 
