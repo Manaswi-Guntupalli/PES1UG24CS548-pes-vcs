@@ -35,7 +35,7 @@ uint32_t get_file_mode(const char *path) {
     if (st.st_mode & S_IXUSR) return MODE_EXEC;
     return MODE_FILE;
 }
-/*
+
 // Parse binary tree data into a Tree struct safely.
 // Returns 0 on success, -1 on parse error.
 int tree_parse(const void *data, size_t len, Tree *tree_out) {
@@ -79,7 +79,7 @@ int tree_parse(const void *data, size_t len, Tree *tree_out) {
     }
     return 0;
 }
-*/
+
 // Helper for qsort to ensure consistent tree hashing
 static int compare_tree_entries(const void *a, const void *b) {
     return strcmp(((const TreeEntry *)a)->name, ((const TreeEntry *)b)->name);
@@ -131,6 +131,7 @@ int tree_serialize(const Tree *tree, void **data_out, size_t *len_out) {
 //   - object_write    : save that binary buffer to the store as OBJ_TREE
 //
 // Returns 0 on success, -1 on error.
+/*
 static int write_tree_level(IndexEntry *entries, int count, int depth, ObjectID *id_out) {
     Tree tree;
     tree.count = 0;
@@ -208,7 +209,7 @@ static int write_tree_level(IndexEntry *entries, int count, int depth, ObjectID 
     free(data);
     return 0;
 }
-
+*/
 int tree_from_index(ObjectID *id_out) {
     Index idx;
     if (index_load(&idx) != 0) return -1;
