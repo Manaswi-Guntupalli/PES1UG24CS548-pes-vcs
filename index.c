@@ -180,3 +180,34 @@ int index_load(Index *index) {
 //
 // Returns 0 on success, -1 on error.
 
+
+
+int index_save(const Index *index) {
+    char tmp_path[512];
+    snprintf(tmp_path, sizeof(tmp_path), "%s.tmp", INDEX_FILE);
+
+    FILE *f = fopen(tmp_path, "w");
+    if (!f) return -1;
+
+    Index *sorted = malloc(sizeof(Index));
+    if (!sorted) {
+        fclose(f);
+        return -1;
+    }
+    *sorted = *index;
+    qsort(sorted->entries, sorted->count, sizeof(IndexEntry), compare_index_entries);
+
+    for (int i = 0; i < sorted->count; i++) {
+        const IndexEntry *e = &sorted->entries[i];
+        char hex[HASH_HEX_SIZE + 1];
+        hash_to_hex(&e->hash, hex);
+        fprintf(f, "%06o %s %lu %u %s\n", e->mode, hex, e->mtime_sec, e->size, e->path);
+    }
+    free(sorted);
+
+    fflush(f);
+    fsync(fileno(f));
+    fclose(f);
+
+    return rename(tmp_path, INDEX_FILE);
+}
