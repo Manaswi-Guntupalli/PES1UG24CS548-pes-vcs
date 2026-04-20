@@ -187,7 +187,7 @@ int object_read(const ObjectID *id, ObjectType *type_out,
     FILE *fp = fopen(path, "rb");
     if (!fp) return -1;
 
-    //fseek(fp, 0, SEEK_END);
+    fseek(fp, 0, SEEK_END);
     long size = ftell(fp);
     rewind(fp);
 
