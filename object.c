@@ -110,7 +110,7 @@ int object_write(ObjectType type, const void *data, size_t len, ObjectID *id_out
     buffer[header_len] = '\0';
     memcpy(buffer + header_len + 1, data, len);
 
-    //compute_hash(buffer, full_size, id_out);
+    compute_hash(buffer, full_size, id_out);
 
     char hex[HASH_HEX_SIZE + 1];
     hash_to_hex(id_out, hex);
@@ -124,7 +124,7 @@ int object_write(ObjectType type, const void *data, size_t len, ObjectID *id_out
     snprintf(dir, sizeof(dir), "%s/%.2s", OBJECTS_DIR, hex);
     snprintf(path, sizeof(path), "%s/%s", dir, hex + 2);
 
-    mkdir(dir, 0755);
+    //mkdir(dir, 0755);
 
     char tmp[600];
     snprintf(tmp, sizeof(tmp), "%s/tmpXXXXXX", dir);
