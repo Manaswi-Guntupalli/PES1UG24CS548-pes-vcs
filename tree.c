@@ -25,7 +25,7 @@ extern int object_write(ObjectType type, const void *data, size_t len, ObjectID 
 #define MODE_DIR       0040000
 
 // ─── PROVIDED ───────────────────────────────────────────────────────────────
-/*
+
 // Determine the object mode for a filesystem path.
 uint32_t get_file_mode(const char *path) {
     struct stat st;
@@ -35,7 +35,7 @@ uint32_t get_file_mode(const char *path) {
     if (st.st_mode & S_IXUSR) return MODE_EXEC;
     return MODE_FILE;
 }
-*/
+/*
 // Parse binary tree data into a Tree struct safely.
 // Returns 0 on success, -1 on parse error.
 int tree_parse(const void *data, size_t len, Tree *tree_out) {
@@ -79,7 +79,7 @@ int tree_parse(const void *data, size_t len, Tree *tree_out) {
     }
     return 0;
 }
-
+*/
 // Helper for qsort to ensure consistent tree hashing
 static int compare_tree_entries(const void *a, const void *b) {
     return strcmp(((const TreeEntry *)a)->name, ((const TreeEntry *)b)->name);
